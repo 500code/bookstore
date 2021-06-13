@@ -1,7 +1,9 @@
-package com.wlwl.sprigboot.config;
+package com.wlwl.springboot.config;
 
+import com.wlwl.springboot.interceptor.JwtInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -20,5 +22,12 @@ public class WebMvcConfig implements WebMvcConfigurer{
                 .allowedMethods("GET","HEAD","POST","PUT","DELETE","OPTIONS")
                 .maxAge(3600)
                 .allowedHeaders("*");
+    }
+//    token 拦截
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new JwtInterceptor())
+                .addPathPatterns("/**")//需要token验证
+                .excludePathPatterns("/api/user/login");//用户下的放行
     }
 }
