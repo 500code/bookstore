@@ -1,4 +1,4 @@
-package com.wlwl.sprigboot.controller;
+package com.wlwl.springboot.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

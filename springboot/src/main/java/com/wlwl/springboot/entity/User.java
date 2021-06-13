@@ -1,4 +1,4 @@
-package com.wlwl.sprigboot.entity;
+package com.wlwl.springboot.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

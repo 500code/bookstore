@@ -1,9 +1,9 @@
-package com.wlwl.sprigboot.service.serviceImpl;
+package com.wlwl.springboot.service.serviceImpl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.wlwl.sprigboot.entity.User;
-import com.wlwl.sprigboot.mapper.loginMapper;
-import com.wlwl.sprigboot.service.loginService;
+import com.wlwl.springboot.entity.User;
+import com.wlwl.springboot.mapper.loginMapper;
+import com.wlwl.springboot.service.loginService;
 import org.springframework.stereotype.Service;
 
 @Service

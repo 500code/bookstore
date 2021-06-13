@@ -1,4 +1,4 @@
-package com.wlwl.sprigboot.utils;
+package com.wlwl.springboot.utils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;

@@ -1,4 +1,4 @@
-package com.wlwl.sprigboot.config;
+package com.wlwl.springboot.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

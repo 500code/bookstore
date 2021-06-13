@@ -3,7 +3,7 @@ server:
 # 数据库连接
 spring:
   application:
-    name: ksd-state
+    name: springboot
   profiles:
     active: dev
   jackson:
