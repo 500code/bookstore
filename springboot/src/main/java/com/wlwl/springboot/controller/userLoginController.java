@@ -5,9 +5,7 @@ import com.wlwl.springboot.entity.User;
 import com.wlwl.springboot.service.userLoginService;
 import com.wlwl.springboot.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,16 +15,15 @@ import java.util.Map;
 public class userLoginController {
     @Autowired
     private userLoginService userLoginService;
-    @GetMapping("/login")
+    @PostMapping("/login")
     public Map<String,Object> login(User user){
         Map<String,Object> map = new HashMap<>();
         QueryWrapper<User> wapper = new QueryWrapper<>();
         wapper.eq("uname",user.getUname());
         wapper.eq("upwd",user.getUpwd());
-        int result = userLoginService.count(wapper);
-        if (result>0){
+        User one = userLoginService.getOne(wapper);
+        if (one!=null){
             Map<String,String> payload = new HashMap<>();
-            User one = userLoginService.getOne(wapper);
             payload.put("user",one.getUname());
             String token = JwtUtils.getToken(payload);
             map.put("state",true);
@@ -35,7 +32,7 @@ public class userLoginController {
             return map;
         }else {
             map.put("state",false);
-            map.put("msg","查无此账号，请先注册");
+            map.put("msg","账号密码出错");
             return map;
         }
     }
