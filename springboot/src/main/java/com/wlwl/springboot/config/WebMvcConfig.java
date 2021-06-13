@@ -13,13 +13,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration(proxyBeanMethods = false)  //告诉springboot这是一个配置类
 public class WebMvcConfig implements WebMvcConfigurer{
 
-
 //    放行api下的所有
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**")
                 .allowedOrigins("*")
-                .allowedMethods("GET","HEAD","POST","PUT","DELETE","OPTIONS")
+                .allowedMethods("*")
                 .maxAge(3600)
                 .allowedHeaders("*");
     }

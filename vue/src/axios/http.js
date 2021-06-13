@@ -1,10 +1,9 @@
 /**
  * ajax请求配置
  */
-import Vue from 'vue'
 import axios from 'axios'
-import {Message} from 'element-ui'
-import {store} from '../store/store'
+import { ElMessage } from 'element-plus'
+import store from '../store/'
 import router from '../router/index'
 
 // axios默认配置
@@ -38,7 +37,7 @@ axios.interceptors.response.use(
     response => {
         if (response.status) {
             if (response.data.code == '401') {
-                Message.error('登录过期,请重新登录')
+                ElMessage.error('登录过期,请重新登录')
                 router.replace({
                     path: '/login'
                 })
@@ -70,21 +69,21 @@ axios.interceptors.response.use(
 
                 case 401:
                     // 返回 401 清除token信息并跳转到登录页面
-                    Message.error('登录过期,请重新登录')
+                    ElMessage.error('登录过期,请重新登录')
                     router.replace({
                         path: '/login'
                     })
                     break
                 case 403:
                     if (error.response.data.msg) {
-                        Message.error(error.response.data.msg)
+                        ElMessage.error(error.response.data.msg)
                     }
                     break
                 case 404:
-                    Message.error('请求地址不存在')
+                    ElMessage.error('请求地址不存在')
                     break
                 default:
-                    Message.error('请求失败')
+                    ElMessage.error('请求失败')
                     break
             }
         }
