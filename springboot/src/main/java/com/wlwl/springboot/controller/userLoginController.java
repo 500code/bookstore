@@ -15,6 +15,7 @@ import java.util.Map;
 public class userLoginController {
     @Autowired
     private userLoginService userLoginService;
+
     @PostMapping("/login")
     public Map<String,Object> login(User user){
         Map<String,Object> map = new HashMap<>();
@@ -32,7 +33,7 @@ public class userLoginController {
             return map;
         }else {
             map.put("state",false);
-            map.put("msg","账号密码出错");
+            map.put("msg","查无此账号，请先注册");
             return map;
         }
     }
