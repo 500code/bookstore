@@ -1,0 +1,33 @@
+server:
+  port: 8081
+# 数据库连接
+spring:
+  application:
+    name: ksd-state
+  profiles:
+    active: dev
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    locale: zh_CN
+    # 解决json返回过程中long的精度丢失问题
+    generator:
+      write-numbers-as-strings: true
+      write-bigdecimal-as-plain: true
+  mvc:
+    servlet:
+      load-on-startup: 1 #SpringBoot的接口第一次访问都很慢，通过日志可以发现，dispatcherServlet不是一开始就加载的，有访问才开始加载的，即懒加载。
+  main:
+#    允许bean覆盖
+    allow-bean-definition-overriding: true
+
+# mybatis-plus配置
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:/mapper/*.xml
+  type-aliases-package: com.wlwl.entity
+
+logging:
+  level:
+    root: info
