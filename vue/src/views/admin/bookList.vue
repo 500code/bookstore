@@ -62,7 +62,7 @@
         </el-table-column>
       </el-table>
 
-      <div class="pagination" v-if="pageshow">
+      <div class="pagination">
         <el-pagination
             background
             layout="total, prev, pager, next"
@@ -120,14 +120,13 @@ export default {
       pageshow:true,
       pno:1
     }
-
   },
   created() {
     this.getData();
   },
 
   methods: {
-     // 获取 easy-mock 的模拟数据
+//     // 获取 easy-mock 的模拟数据
     getData() {
       let that = this;
       this.$http.get("http://localhost:8081/api/getBookList?pno=" + that.pno)
