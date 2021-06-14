@@ -16,8 +16,9 @@ public class userLoginController {
     @Autowired
     private userLoginService userLoginService;
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public Map<String,Object> login(User user){
+        System.out.println(user);
         Map<String,Object> map = new HashMap<>();
         QueryWrapper<User> wapper = new QueryWrapper<>();
         wapper.eq("uname",user.getUname());

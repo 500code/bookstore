@@ -8,7 +8,7 @@ import router from '../router/index'
 
 // axios默认配置
 axios.defaults.timeout = 10000 // 超时时间
-
+// axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 // 整理数据
 
 // 路由请求拦截
