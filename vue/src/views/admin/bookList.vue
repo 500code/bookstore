@@ -62,14 +62,13 @@
         </el-table-column>
       </el-table>
 
-      <div class="pagination">
+      <div class="pagination" v-if="pageshow">
         <el-pagination
             background
             layout="total, prev, pager, next"
             :current-page="query.pageIndex"
             :page-size="query.pageSize"
             :total="query.pageTotal"
-            :page-count="query.pageCount"
             @current-change="handlePageChange"
         ></el-pagination>
       </div>
@@ -105,7 +104,6 @@ export default {
         pageIndex: 1,  //当前页码
         pageTotal: 0,   //总共条数
         pageSize: 4,   //每页多少条
-        pageCount:10   //总页数
       },
       tableData: [
         {
@@ -119,32 +117,26 @@ export default {
         }
 
       ],
-      multipleSelection: [],
-      delList: [],
-      editVisible: false,
-
-      form: {},
-      idx: -1,
-      id: -1
+      pageshow:true,
+      pno:1
     }
+
   },
   created() {
     this.getData();
   },
 
   methods: {
-//     // 获取 easy-mock 的模拟数据
+     // 获取 easy-mock 的模拟数据
     getData() {
       let that = this;
-      const pno = this.query.pageIndex
-      this.$http.get("http://localhost:8081/api/getBookList?pno=" + pno)
+      this.$http.get("http://localhost:8081/api/getBookList?pno=" + that.pno)
           .then(res => {
             console.log(res)
             that.tableData = res.data.list.records
-            that.query.pageIndex=res.data.list.current  //当前是第几页
-            that.query.pageTotal=res.data.list.total  //总共条数
-            that.query.pageSize=res.data.list.size    //每页多少条
-            that.query.pageCount=res.data.list.pages  //多少页
+            that.query.pageIndex=Number(res.data.list.current)  //当前是第几页
+            that.query.pageTotal=Number(res.data.list.total ) //总共条数
+            that.query.pageSize=Number(res.data.list.size)//每页多少条
             for (let i = 0; i < res.data.list.records.length; i++) {
               this.tableData[i].taglist = res.data.list.records[i].taglist.split(",")
             }
@@ -185,7 +177,8 @@ export default {
     // 分页导航
 
     handlePageChange(val) {
-      this.$set(this.query, "pageIndex", val);
+      let that=this
+      that.pno=val
       console.log(val)
       this.getData();
     }
