@@ -8,6 +8,7 @@ import router from '../router/index'
 
 // axios默认配置
 axios.defaults.timeout = 10000 // 超时时间
+
 // 整理数据
 
 // 路由请求拦截
