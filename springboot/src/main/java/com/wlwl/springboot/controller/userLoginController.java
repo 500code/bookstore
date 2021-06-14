@@ -16,7 +16,7 @@ public class userLoginController {
     @Autowired
     private userLoginService userLoginService;
 
-    @PostMapping("/login")
+    @GetMapping("/login")
     public Map<String,Object> login(User user){
         Map<String,Object> map = new HashMap<>();
         QueryWrapper<User> wapper = new QueryWrapper<>();

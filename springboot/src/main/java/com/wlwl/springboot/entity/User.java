@@ -19,5 +19,5 @@ public class User {
     private int ucount;
     private int ustate;
     private String utoken;
-    private String vip;
+//    private String vip;
 }

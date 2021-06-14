@@ -25,8 +25,8 @@ public class WebMvcConfig implements WebMvcConfigurer{
 //    token 拦截
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new JwtInterceptor())
-                .addPathPatterns("/**")//需要token验证
-                .excludePathPatterns("/api/user/login");//用户下的放行
+//        registry.addInterceptor(new JwtInterceptor())
+//                .addPathPatterns("/**")//需要token验证
+//                .excludePathPatterns("/api/user/login");//用户下的放行
     }
 }
