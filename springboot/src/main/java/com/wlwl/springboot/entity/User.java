@@ -14,7 +14,7 @@ public class User {
     private String uname;
     private String upwd;
     private String ulogo;
-    private int umax;
+    private int umax=5;
     private String ubid;
     private int ucount;
     private int ustate;

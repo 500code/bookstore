@@ -11,13 +11,13 @@ import lombok.ToString;
 import java.math.BigDecimal;
 
 @Data
-//@NoArgsConstructor
-//@AllArgsConstructor
-//@ToString
-//@TableName("Book")
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+@TableName("Book")
 public class Book {
     //    主键 书的id
-//    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.AUTO)
     private Integer bid;
     //    书名
     private String bname;

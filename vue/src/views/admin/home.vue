@@ -106,7 +106,7 @@ export default {
   name: "home",
   data() {
     return {
-      name: localStorage.getItem("username"),
+      name: localStorage.getItem("admin"),
       todoList: [
         {
           title: "今天要修复100个bug",

@@ -47,7 +47,7 @@
 export default {
   data() {
     return {
-      name: "linxin",
+      name: localStorage.getItem("admin"),
       message: 2
     };
   },

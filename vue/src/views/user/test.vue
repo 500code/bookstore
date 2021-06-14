@@ -17,8 +17,11 @@ export default {
     test() {
       let that = this;
       // loginService.ckLogin()
-      this.$http.get(
-          "http://localhost:8081/api/test", ).then(res => {
+      const formData = new FormData();
+      formData.append("uname","肥宝")
+      formData.append("upwd","123123")
+      this.$http.post(
+          "http://localhost:8081/api/user/login",formData).then(res => {
             that.d=res
       })
     }

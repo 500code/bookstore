@@ -18,6 +18,7 @@ public class JwtInterceptor implements HandlerInterceptor {
         Map<String,Object> map=new HashMap<>();
         //获取请求头中的token
         String token=request.getHeader("token");
+        System.out.println(token);
         try{
             JwtUtils.verify(token);
             return true;

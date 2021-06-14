@@ -1,10 +1,11 @@
 package com.wlwl.springboot.config;
 
+import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.wlwl.springboot.interceptor.JwtInterceptor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /*
@@ -27,6 +28,8 @@ public class WebMvcConfig implements WebMvcConfigurer{
     public void addInterceptors(InterceptorRegistry registry) {
 //        registry.addInterceptor(new JwtInterceptor())
 //                .addPathPatterns("/**")//需要token验证
+//                .excludePathPatterns("/api/admin/login")
 //                .excludePathPatterns("/api/user/login");//用户下的放行
     }
+
 }

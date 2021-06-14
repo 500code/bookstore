@@ -24,7 +24,8 @@
 </template>
 
 <script>
-import loginService from "../../service/loginService";
+
+import {ElMessage} from "element-plus";
 
 export default {
   data() {
@@ -44,16 +45,27 @@ export default {
     };
   },
   created() {
-    loginService.ckLogin().then(res => {
-      console.log(res)
-    })
+
   },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          localStorage.setItem("username",this.form.username)
-          this.$router.push("/admin");
+          let that=this;
+          const formData = new FormData();
+          formData.append("aname", this.form.username)
+          formData.append("apwd", this.form.password)
+          this.$http.post("http://localhost:8081/api/admin/login", formData)
+                  .then(res => {
+                    localStorage.setItem("token", res.data.token)
+                    localStorage.setItem("admin",res.data.admin)
+                    // console.log(res.data.admin)
+                    that.$store.dispatch("set_token", res.data.token)
+                    ElMessage.success('登录成功')
+                    that.$router.push('/admin');
+                    console.log(res)
+                    // console.log(that.$store.state.token)
+                  })
         } else {
           console.log('error submit!!');
           return false;
