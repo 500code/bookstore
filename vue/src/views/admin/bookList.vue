@@ -69,7 +69,6 @@
             :current-page="query.pageIndex"
             :page-size="query.pageSize"
             :total="query.pageTotal"
-            :page-count="query.pageCount"
             @current-change="handlePageChange"
         ></el-pagination>
       </div>
@@ -105,7 +104,6 @@ export default {
         pageIndex: 1,  //当前页码
         pageTotal: 0,   //总共条数
         pageSize: 4,   //每页多少条
-        pageCount:10   //总页数
       },
       tableData: [
         {
@@ -144,7 +142,6 @@ export default {
             that.query.pageIndex=res.data.list.current  //当前是第几页
             that.query.pageTotal=res.data.list.total  //总共条数
             that.query.pageSize=res.data.list.size    //每页多少条
-            that.query.pageCount=res.data.list.pages  //多少页
             for (let i = 0; i < res.data.list.records.length; i++) {
               this.tableData[i].taglist = res.data.list.records[i].taglist.split(",")
             }
@@ -185,7 +182,7 @@ export default {
     // 分页导航
 
     handlePageChange(val) {
-      this.$set(this.query, "pageIndex", val);
+      // this.$set(this.query, "pageIndex", val);
       console.log(val)
       this.getData();
     }
