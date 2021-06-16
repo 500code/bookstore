@@ -2,7 +2,7 @@
  * ajax请求配置
  */
 import axios from 'axios'
-import { ElMessage } from 'element-plus'
+import {ElMessage} from 'element-plus'
 import store from '../store/'
 import router from '../router/index'
 
@@ -21,8 +21,8 @@ axios.interceptors.request.use(
                 localStorage.setItem('token', '')
                 config.headers.Authorization = ''
             } else {
-                config.headers.Authorization =store.state.token
-                // console.log("token==>",store.state.token)
+                config.headers.Authorization = store.state.token
+                console.log("token==>", store.state.token)
             }
         }
         return config
@@ -37,11 +37,12 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
     response => {
         if (response.status) {
-            console.log("response==>",response)
+            console.log("地址=>", window.location.pathname)
+            console.log("response==>", response)
             if (response.data.code == '401') {
                 ElMessage.error('登录过期,请重新登录')
                 router.replace({
-                    path: '/login'
+                    path: 'login'
                 })
             }
         }
@@ -53,6 +54,7 @@ axios.interceptors.response.use(
             switch (error.response.status) {
                 case 401:
                     // 返回 401 清除token信息并跳转到登录页面
+                    this.$store.dispatch("del_token")
                     ElMessage.error('登录过期,请重新登录')
                     router.replace({
                         path: '/login'
@@ -71,7 +73,7 @@ axios.interceptors.response.use(
                     break
             }
         }
-        console.log('error' + error.response)
+        console.log('error', error.response)
         return Promise.reject(error.response) // 返回接口返回的错误信息
     }
 )

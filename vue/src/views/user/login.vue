@@ -3,7 +3,7 @@
     <div class="login-main">
       <div class="title">登录</div>
       <div class="main">
-        <el-form :model="form" :label-position="top" status-icon :rules="rules" ref="loginFrom"
+        <el-form :model="form" status-icon :rules="rules" ref="loginFrom"
                  label-width="100px"
                  class="demo-ruleForm">
           <el-form-item prop="uname">
@@ -45,7 +45,6 @@ export default {
     };
   },
   created() {
-
   },
   methods: {
     submitForm(formName) {

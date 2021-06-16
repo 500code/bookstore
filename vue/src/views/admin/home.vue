@@ -24,7 +24,7 @@
             <el-image
                 style="width: 100%; height: 210px"
                 :src="item.src"
-                :fit="fit"></el-image>
+            ></el-image>
           </el-carousel-item>
         </el-carousel>
       </el-card>

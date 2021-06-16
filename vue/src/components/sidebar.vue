@@ -105,7 +105,6 @@ export default {
   },
   computed: {
     onRoutes() {
-      console.log(this.$route.path.replace('/admin/',''))
       return this.$route.path.replace('/admin/','');
     }
   }

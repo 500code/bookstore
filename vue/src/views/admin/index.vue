@@ -17,6 +17,9 @@ export default {
   components: {
     vHeader,
     vSidebar
+  },
+  created() {
+    console.log(this.$route.path)
   }
 };
 </script>

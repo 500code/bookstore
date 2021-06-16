@@ -20,7 +20,7 @@
               <router-link to="/center" style="width: 180px;display: block">个人中心</router-link>
             </el-menu-item>
             <el-menu-item index="2-3">
-              <router-link to="/login" style="width: 180px;display: block">退出登录</router-link>
+              <router-link to="/login" style="width: 180px;display: block" @click="signOut">退出登录</router-link>
             </el-menu-item>
           </el-submenu>
         </div>
@@ -78,7 +78,6 @@
             </el-card>
           </el-col>
           <div class="page">
-            <!--                :hide-on-single-page="value"-->
             <el-pagination
                 :total="5"
                 layout="prev, pager, next">
@@ -135,7 +134,7 @@ export default {
       a: 0,   //滚动条的滚动
       time: '', //图片的定时器
       time2: '', //滚动条的定时器
-      act: {},
+      act: '',
       active: 0,
       // bar:'',  //滚动条
       imgList: [
@@ -176,9 +175,8 @@ export default {
         if (this.x < -1200) {
           this.x = 0;
         }
-        this.act = {
-          transform: 'translateX(' + this.x-- + 'px)'
-        }
+        this.act =
+          'transform: translateX(' + this.x-- + 'px)'
       }, 10)
     },
     out() {
@@ -198,7 +196,11 @@ export default {
     next() {
       if (this.active++ > 2) this.active = 0;
     },
-
+    //退出登录
+    signOut(){
+      this.$store.dispatch("del_token")
+      // this.$router.push("/login")
+    }
   }
 
 }

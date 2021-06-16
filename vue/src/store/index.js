@@ -5,24 +5,22 @@ export default createStore({
     state() {
         return {
             token: localStorage.getItem('token') || "",
-            uid: localStorage.getItem('uid') || ""
+            uid: localStorage.getItem('uid') || "",
+            aid:sessionStorage.getItem("aid") ||""
         }
     },
     mutations: {
         set_token(state, token) { // 第一个参数是拿到state对象
             localStorage.setItem('token', token.token)
-            localStorage.setItem('uid', token.uid)
+            localStorage.setItem('uid', token.uid ||'') //admin中调用就不会报错
             state.token = token.token
-            state.uid = token.uid
+            state.uid = token.uid ||''
         },
         del_token(state) {
             localStorage.removeItem('token')
             localStorage.removeItem('uid')
             state.token = ""
             state.uid = ""
-            console.log("我是汉奸=》》", localStorage.removeItem('token'),
-                localStorage.removeItem('uid'), state.token,
-                state.uid)
         }
     },
     actions: {
