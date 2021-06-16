@@ -77,9 +77,17 @@ public class UserController {
         User user = userService.getById(uid);
         map.put("user", user);
         String record = user.getRecord();
+        System.out.println(record);
         if (StringUtils.hasLength(record)) {
-            String[] split = record.split(",");
             List<Book> books = new ArrayList<>();
+            if (!record.contains(",")) {
+                System.out.println("进来了");
+                books.add(bookService.getById(record));
+                map.put("books", books);
+                return R.ok().data(map);
+            }
+            String[] split = record.split(",");
+
             for (String s : split) {
                 books.add(bookService.getById(s));
             }

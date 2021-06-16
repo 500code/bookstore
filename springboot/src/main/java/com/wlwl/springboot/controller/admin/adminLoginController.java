@@ -31,7 +31,8 @@ public class adminLoginController {
             payload.put("admin",ad.getAname());
             String token = JwtUtils.getToken(payload);
             map.put("msg","登陆成功");
-            map.put("admin",ad.getAname());
+            map.put("aname",ad.getAname());
+            map.put("aid",ad.getAid());
             map.put("token",token);
             System.out.println(map);
             return R.ok().code(20000).data(map);
