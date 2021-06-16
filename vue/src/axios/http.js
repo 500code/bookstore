@@ -22,6 +22,7 @@ axios.interceptors.request.use(
                 config.headers.Authorization = ''
             } else {
                 config.headers.Authorization =store.state.token
+                // console.log("token==>",store.state.token)
             }
         }
         return config
@@ -36,28 +37,12 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
     response => {
         if (response.status) {
+            console.log("response==>",response)
             if (response.data.code == '401') {
                 ElMessage.error('登录过期,请重新登录')
                 router.replace({
                     path: '/login'
                 })
-            }
-        }
-        //后台返回的分页信息都是字符串 需要在这个地方进行转换 转换为数字
-        if (response.data) {
-            if (response.data.data) {
-                if (response.data.data.current) {
-                    response.data.data.current = parseInt(response.data.data.current)
-                }
-                if (response.data.data.pages) {
-                    response.data.data.pages = parseInt(response.data.data.pages)
-                }
-                if (response.data.data.size) {
-                    response.data.data.size = parseInt(response.data.data.size)
-                }
-                if (response.data.data.current) {
-                    response.data.data.total = parseInt(response.data.data.total)
-                }
             }
         }
         return response.data
@@ -66,7 +51,6 @@ axios.interceptors.response.use(
         console.log(error)
         if (error.response) {
             switch (error.response.status) {
-
                 case 401:
                     // 返回 401 清除token信息并跳转到登录页面
                     ElMessage.error('登录过期,请重新登录')

@@ -20,7 +20,7 @@
             </el-menu-item>
             <el-menu-item
                 index="2-3">
-              <router-link to="/login" style="width: 180px;display: block">退出登录</router-link>
+              <router-link to="/login" style="width: 180px;display: block" @click="signOut">退出登录</router-link>
             </el-menu-item>
           </el-submenu>
         </div>
@@ -29,7 +29,7 @@
     <el-main>
       <div class="wrapper">
         <div class="container">
-          <el-card shadow="hover">
+          <el-card shadow="hover" style="height: 160px;">
             <div class="user-info">
               <img src="../../assets/img.png" class="user-avator" alt/>
               <div class="user-info-cont ">
@@ -84,17 +84,17 @@ export default {
   data() {
     return {
       tableData: [],
-      user: ''
+      user: '',
+      uid: this.$store.state.uid || 1
     }
   },
   created() {
     this.getData();
   },
-
   methods: {
     getData() {
       let that = this;
-      this.$http.get("http://localhost:8081/api/user/getBookByUid/" + 6)
+      this.$http.get("http://localhost:8081/api/user/getBookByUid/" + that.uid)
           .then(res => {
             console.log(res)
             that.tableData = res.data.books
@@ -115,8 +115,6 @@ export default {
             const data = new FormData();
             data.append("bid", row.bid)
             data.append("uid", this.user.uid)
-            console.log(row.bid)
-            console.log(this.user.uid)
             this.$http.post("http://localhost:8081/api/returnBook", data).then(res => {
               console.log(res)
               if (res.code === "20000") {
@@ -130,6 +128,11 @@ export default {
           })
           .catch(() => {
           });
+    },
+    //退出登录
+    signOut(){
+      this.$store.dispatch("del_token")
+      // this.$router.push("/login")
     }
   }
 }

@@ -8,6 +8,7 @@ import com.wlwl.springboot.service.UserService;
 import com.wlwl.springboot.service.bookService;
 import com.wlwl.springboot.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -35,8 +36,10 @@ public class UserController {
         if (one != null) {
             Map<String, String> payload = new HashMap<>();
             payload.put("user", one.getUname());
+            payload.put("uid", one.getUid() + "");
             String token = JwtUtils.getToken(payload);
             map.put("token", token);
+            map.put("uid", one.getUid());
             return R.ok().code(20000).data(map);
         } else {
             map.put("state", false);
@@ -70,16 +73,19 @@ public class UserController {
     @GetMapping("getBookByUid/{uid}")
     public R getBookByUid(@PathVariable Integer uid) {
         System.out.println(uid);
-        User user = userService.getById(uid);
-        String record = user.getRecord();
-        String[] split = record.split(",");
-        List<Book> books = new ArrayList<>();
-        for (String s : split) {
-            books.add(bookService.getById(s));
-        }
         Map<String, Object> map = new HashMap<>();
+        User user = userService.getById(uid);
         map.put("user", user);
-        map.put("books", books);
+        String record = user.getRecord();
+        if (StringUtils.hasLength(record)) {
+            String[] split = record.split(",");
+            List<Book> books = new ArrayList<>();
+            for (String s : split) {
+                books.add(bookService.getById(s));
+            }
+            map.put("books", books);
+            return R.ok().data(map);
+        }
         return R.ok().data(map);
     }
 }

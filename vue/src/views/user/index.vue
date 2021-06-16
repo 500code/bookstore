@@ -16,9 +16,12 @@
           <el-menu-item index="5"><i class="el-icon-bell icon"></i>消息</el-menu-item>
           <el-submenu index="6">
             <template #title><i class="el-icon-user icon"></i>用户</template>
-            <el-menu-item index="2-1"><router-link to="/center" style="width: 180px;display: block">个人中心</router-link></el-menu-item>
-            <el-menu-item
-                index="2-3"><router-link to="/login" style="width: 180px;display: block">退出登录</router-link></el-menu-item>
+            <el-menu-item index="2-1">
+              <router-link to="/center" style="width: 180px;display: block">个人中心</router-link>
+            </el-menu-item>
+            <el-menu-item index="2-3">
+              <router-link to="/login" style="width: 180px;display: block">退出登录</router-link>
+            </el-menu-item>
           </el-submenu>
         </div>
       </el-menu>
@@ -113,7 +116,7 @@
               <el-step title="步骤 3" description="最后这样"></el-step>
             </el-steps>
             <div class="next">
-            <el-button  @click="next">下一步</el-button>
+              <el-button @click="next">下一步</el-button>
             </div>
           </div>
         </div>
@@ -164,7 +167,7 @@ export default {
   },
   mounted() {
     this.bar = document.querySelector('.el-scrollbar__thumb')
-    this.bar.style.width='50%'
+    this.bar.style.width = '50%'
     console.log(this.bar)
   },
   methods: {
@@ -284,12 +287,14 @@ export default {
   justify-content: flex-end;
   width: 100%;
 }
-.next{
+
+.next {
   display: flex;
   justify-content: flex-end;
   margin-top: 20px;
 }
-.recommend span{
+
+.recommend span {
   font-size: 20px !important;
 }
 </style>

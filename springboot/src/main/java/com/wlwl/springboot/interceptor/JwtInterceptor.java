@@ -17,7 +17,7 @@ public class JwtInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         Map<String,Object> map=new HashMap<>();
         //获取请求头中的token
-        String token=request.getHeader("token");
+        String token=request.getHeader("Authorization");
         System.out.println(token);
         try{
             JwtUtils.verify(token);
@@ -35,6 +35,7 @@ public class JwtInterceptor implements HandlerInterceptor {
             e.printStackTrace();
             map.put("msg","token无效");
         }
+        map.put("code",401);
         map.put("state",false);//设置状态
         //将map转为json
         String json= new ObjectMapper().writeValueAsString(map);
