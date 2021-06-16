@@ -57,10 +57,12 @@
                         formData.append("upwd", this.form.upwd)
                         this.$http.post("http://localhost:8081/api/user/login", formData)
                             .then(res => {
-                                localStorage.setItem("token", res.data.token)
-                                that.$store.dispatch("set_token", res.data.token)
-                                ElMessage.success('登录成功')
-                                that.$router.push('/index');
+                                if(res.code==20000){
+                                    localStorage.setItem("token", res.data.token)
+                                    that.$store.dispatch("set_token", res.data.token)
+                                    ElMessage.success('登录成功')
+                                    that.$router.push('/index');
+                                }
                                 console.log(res)
                                 console.log(that.$store.state.token)
                             })

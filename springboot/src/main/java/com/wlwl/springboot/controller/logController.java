@@ -1,6 +1,9 @@
 package com.wlwl.springboot.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wlwl.springboot.entity.R;
 import com.wlwl.springboot.entity.log;
 import com.wlwl.springboot.service.logService;
@@ -18,11 +21,16 @@ public class logController {
 
     @Autowired
     private logService logService;
-
     @GetMapping("/log")
-    public R getLog(){
-        List<log> log = logService.getLog(3, 3);
-        System.out.println(log);
-        return R.ok().data("log",log);
+    public R getLog( @RequestParam(value = "pno", defaultValue = "1") int pno){
+        IPage<log> page = new Page<>(pno,4);
+        QueryWrapper<log> wrapper = new QueryWrapper<>();
+        wrapper.orderByDesc("ldate");
+        IPage<log> page1 = logService.page(page,wrapper);
+        System.out.println(page1);
+        if(page1!=null){
+            return R.ok().code(20000).data("list",page1);
+        }
+        return R.error().code(21003);
     }
 }
