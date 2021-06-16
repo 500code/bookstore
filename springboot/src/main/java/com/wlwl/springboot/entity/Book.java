@@ -37,5 +37,7 @@ public class Book {
     private String bdesc;
     //  被借次数
     private Integer count;
+    //    当前被谁借了 用，隔开
+    private String record;
 
 }

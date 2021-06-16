@@ -9,8 +9,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wlwl.springboot.entity.Book;
 import com.wlwl.springboot.entity.R;
 import com.wlwl.springboot.entity.User;
+import com.wlwl.springboot.entity.log;
 import com.wlwl.springboot.service.UserService;
 import com.wlwl.springboot.service.bookService;
+import com.wlwl.springboot.service.logService;
 import com.wlwl.springboot.vo.bookVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -19,10 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -32,6 +31,8 @@ public class bookController {
     private bookService bookService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private logService logService;
 
     //查询书记
     @GetMapping("/getBookList")
@@ -154,11 +155,107 @@ public class bookController {
 
     //借书
     @GetMapping("/getBook")
-    public R getBook(bookVo vo) {
-        System.out.println(vo);
-        UpdateWrapper<bookVo> wrapper = new UpdateWrapper<>();
-        wrapper.eq("uid",vo.getUid());
+    public R getBook(@RequestParam("uid") int uid, @RequestParam("bid") int bid) {
+        System.out.println(uid + "=======" + bid);
+        User user = userService.getById(uid);
+        Book book = bookService.getById(bid);
 
-        return R.ok();
+//        查看库存与用户是否还能借书
+        if (user.getNum() >= 5) {
+            return R.error().message("已超出借书最大值，无法继续借书");
+        }
+        if (book.getNum() < 1) {
+            System.out.println(book.getNum());
+            return R.error().message("该书被借光了哦");
+        }
+//       处理用户借书后
+        StringBuffer buffer = new StringBuffer();
+        if (StringUtils.hasLength(user.getRecord())) {  //当前还借了其他的书的情况
+//            原来的图书列表
+            buffer.append(user.getRecord());
+            buffer.append(",");
+//            添加这次借书的bid
+            buffer.append(book.getBid().toString());
+        } else {  //当前未借其他的书
+            buffer.append(book.getBid().toString());
+        }
+        //更新用户借书列表
+        user.setRecord(buffer.toString());
+//        当前借书次数加一
+        user.setNum(user.getNum() + 1);
+//        借书累计次数加一
+        user.setUcount(user.getUcount() + 1);
+
+        //          处理图书被借后
+//        清空StringBuffer里面的内容
+        buffer = new StringBuffer();
+        //       添加借书人uid
+        if (StringUtils.hasLength(book.getRecord())) {  //当前还借了其他的书的情况
+            buffer.append(book.getRecord());
+            buffer.append(",");
+//            添加这次借书的bid
+            buffer.append(user.getUid());
+        } else {  //当前未借其他的书
+            buffer.append(user.getUid());
+        }
+
+        book.setRecord(buffer.toString());//        更新这本书借书人名单
+        book.setNum(book.getNum() - 1); //库存减一
+        book.setCount(book.getCount() + 1); //被借次数加一
+
+//        更新数据库
+        boolean b = userService.saveOrUpdate(user);
+        boolean b1 = bookService.saveOrUpdate(book);
+
+//        添加日志
+        log log = new log();
+        log.setLdate(new Date());
+        log.setBname(book.getBname());
+        log.setUid(user.getUid());
+        log.setUname(user.getUname());
+        log.setOperating(1);
+        log.setReputation(user.getReputation());
+        logService.save(log);
+
+        if (b && b1) {
+            return R.ok().message("借书成功");
+        }
+        return R.error().message("借书失败");
+    }
+
+    //    还书
+    @GetMapping("returnBook")
+    public R returnBook(@RequestParam("uid") int uid, @RequestParam("bid") int bid) {
+        User user = userService.getById(uid);
+        Book book = bookService.getById(bid);
+
+//       处理user
+        user.setNum(user.getNum() - 1); //能借书次数加一
+        String record = user.getRecord().replaceFirst("," + bid, "");
+        user.setRecord(record);
+
+//        处理book
+        book.setNum(book.getNum() - 1); //库存加一
+        record = book.getRecord().replaceFirst("," + uid, "");
+        book.setRecord(record);
+
+        //        更新数据库
+        boolean b = userService.saveOrUpdate(user);
+        boolean b1 = bookService.saveOrUpdate(book);
+
+        //        添加日志
+        log log = new log();
+        log.setLdate(new Date());
+        log.setBname(book.getBname());
+        log.setUid(user.getUid());
+        log.setUname(user.getUname());
+        log.setOperating(0);
+        log.setReputation(user.getReputation());
+        logService.save(log);
+
+        if (b && b1) {
+            return R.ok().message("还书成功");
+        }
+        return R.error().message("还书失败");
     }
 }

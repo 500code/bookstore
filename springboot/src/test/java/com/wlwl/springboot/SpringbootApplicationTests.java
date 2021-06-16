@@ -18,21 +18,21 @@ class SpringbootApplicationTests {
     private UserService userService;
 
     @Test
-    public R login(User user){
-        Map<String,Object> map = new HashMap<>();
+    public R login(User user) {
+        Map<String, Object> map = new HashMap<>();
         QueryWrapper<User> wapper = new QueryWrapper<>();
-        wapper.eq("uname",user.getUname());
-        wapper.eq("upwd",user.getUpwd());
+        wapper.eq("uname", user.getUname());
+        wapper.eq("upwd", user.getUpwd());
         User one = userService.getOne(wapper);
-        if (one!=null){
-            Map<String,String> payload = new HashMap<>();
-            payload.put("user",one.getUname());
+        if (one != null) {
+            Map<String, String> payload = new HashMap<>();
+            payload.put("user", one.getUname());
             String token = JwtUtils.getToken(payload);
-            map.put("msg","登陆成功");
-            map.put("token",token);
+            map.put("msg", "登陆成功");
+            map.put("token", token);
             return R.ok().code(20000).data(map);
-        }else {
-            map.put("msg","账号密码不对");
+        } else {
+            map.put("msg", "账号密码不对");
             return R.ok().code(21003).data(map);
         }
     }
@@ -52,6 +52,13 @@ class SpringbootApplicationTests {
             boolean save = userService.save(user);
             System.out.println(save);
         }
+    }
+
+    @Test
+    public void buffer() {
+        String str = "1,2,3,4,5,6";
+        str = str.replaceFirst(","+4, "");
+        System.out.println(str);
     }
 
 }
