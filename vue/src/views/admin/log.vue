@@ -27,8 +27,7 @@
         <el-table-column prop="bid" label="ID" width="130" align="center"></el-table-column>
         <el-table-column prop="bname" label="用户名" align="center"></el-table-column>
         <el-table-column prop="bname" label="书名" align="center"></el-table-column>
-
-        <el-table-column prop="state" label="状态" align="center"></el-table-column>
+        <el-table-column prop="state" label="信誉值" align="center"></el-table-column>
         <el-table-column label="操作" align="center">
           <template #default="scope">
             <el-tag :type="[scope.row.log=='借书'?'success':'warning']">{{ scope.row.log }}</el-tag>

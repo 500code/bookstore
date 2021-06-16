@@ -76,13 +76,13 @@
                     money: '',   //价格
                     pic: "",   //图片
                     total: '', //总数量
-                    bdesc: '',  //简介
+                    desc: '',  //简介
                     author: ''  //作者
                 },
                 rules: {
                     bname: [
                         {required: true, message: '请输入书名', trigger: 'blur'},
-                        {min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'}
+                        {min: 3, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur'}
                     ],
                     money:
                         [{required: true, message: '请输入金额', trigger: 'blur'}],
@@ -97,20 +97,23 @@
             methods: {
                 submitForm(formName) {
                     console.log(this.tag)
-                    this.$refs[formName].validate((valid) => {
+                    const that=this;
+                    that.$refs[formName].validate((valid) => {
                         if (valid) {
                             const formData = new FormData();
-                            formData.append("bname", this.ruleForm.bname)
-                            formData.append("taglist",this.ruleForm.tagList)
-                            formData.append("money", this.ruleForm.money)
-                            formData.append("ppic", this.ruleForm.pic)
-                            formData.append("total", this.ruleForm.total)
-                            formData.append("bdesc", this.ruleForm.bdesc)
-                            formData.append("author", this.ruleForm.author)
-                            this.$http.post("http://localhost:8081/api/addBook", formData)
+                            formData.append("bname", that.ruleForm.bname)
+                            formData.append("taglist",that.ruleForm.tagList)
+                            formData.append("money", that.ruleForm.money)
+                            formData.append("ppic", that.ruleForm.pic)
+                            formData.append("total", that.ruleForm.total)
+                            formData.append("bdesc", that.ruleForm.desc)
+                            formData.append("author", that.ruleForm.author)
+                            that.$http.post("http://localhost:8081/api/addBook", formData)
                                 .then(res => {
                                     console.log(res)
                                     ElMessage.success("添加成功");
+                                    that.$router.push("/admin/bookList")
+
                                     // console.log(that.$store.state.token)
                                 })
                         } else {

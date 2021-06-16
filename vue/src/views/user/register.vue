@@ -33,7 +33,6 @@
 </template>
 
 <script>
-// import loginService from "../../service/loginService";
 import {ElMessage} from 'element-plus'
 
 export default {
@@ -100,8 +99,15 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          const formData = new FormData();
+          formData.append("uname", this.ruleForm.uname)
+          formData.append("upwd", this.ruleForm.upwd)
+          this.$http.post("http://localhost:8081/api/user/register", formData)
+                  .then(res => {
+                    console.log(res)
+                    ElMessage.success('注册成功')
+                  })
           console.log(valid)
-          this.success()
           localStorage.setItem("uname", this.ruleForm.uname)
           this.$router.push("/");
         } else {

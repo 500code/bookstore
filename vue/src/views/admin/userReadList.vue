@@ -16,29 +16,19 @@
       </el-col>
       <el-table
           :data="tableData"
-          :default-sort="{prop: 'count', order: 'descending'}"
           border
           stripe
           class="table"
           ref="multipleTable"
           @selection-change="handleSelectionChange"
       >
-        <el-table-column prop="bid" label="ID" width="130" align="center" sortable></el-table-column>
-        <el-table-column prop="bname" label="用户名" align="center"></el-table-column>
+        <el-table-column prop="uid" label="ID" width="130" align="center"></el-table-column>
+        <el-table-column prop="uname" label="用户名" align="center"></el-table-column>
 
-        <el-table-column prop="count" label="阅读次数" align="center"></el-table-column>
-        <el-table-column prop="state" label="当前状态" align="center"></el-table-column>
+        <el-table-column prop="ucount" label="借阅数" align="center"></el-table-column>
+        <el-table-column prop="ustate" label="可借次数" align="center"></el-table-column>
 
-        <el-table-column label="标签" align="center">
-          <template #default="scope">
-            <el-tag
-                :key="tag"
-                v-for="tag in scope.row.tagList"
-                :disable-transitions="false">
-              {{ tag }}
-            </el-tag>
-          </template>
-        </el-table-column>
+        <el-table-column prop="reputation" label="信誉度" align="center"></el-table-column>
       </el-table>
 
       <div class="pagination">
@@ -72,11 +62,11 @@ export default {
       },
       tableData: [
         {
-          bid: 1,   //编号
-          bname: 'java',
-          count: 1001,
-          tagList: ['科学', '计算机'],
-          state: '3/5'
+          uid: 1,   //编号
+          uname: 'java',
+          ucount: 1001,
+          ustate: '3/5',
+          reputation:100
         },
         {
           bid: 2,   //编号
@@ -87,6 +77,7 @@ export default {
         }
 
       ],
+      pno:1,
       multipleSelection: [],
       delList: [],
       editVisible: false,
@@ -96,29 +87,48 @@ export default {
       id: -1
     }
   },
-//   },
-//   created() {
-//     this.getData();
-//   },
+  created() {
+    this.getData();
+  },
   methods: {
-//     // 获取 easy-mock 的模拟数据
-//     // getData() {
-//     //   fetchData(this.query).then(res => {
-//     //     console.log(res);
-//     //     this.tableData = res.list;
-//     //     this.pageTotal = res.pageTotal || 50;
-//     //   });
-//     // },
-//     // 触发搜索按钮
-//     handleSearch() {
-//       this.$set(this.query, "pageIndex", 1);
-//       this.getData();
-//     },
-
+    getData() {
+      let that = this;
+      that.$http.get("http://localhost:8081/api/userRanking?pno=" + that.pno)
+              .then(res => {
+                console.log(res)
+                that.tableData = res.data.list.records
+                console.log(that.tableData)
+                that.query.pageIndex = Number(res.data.list.current)  //当前是第几页
+                that.pageTotal = Number(res.data.list.total) //总共条数
+                that.query.pageSize = Number(res.data.list.size)//每页多少条
+              })
+    },
+    handleSearch(){
+      this.search()
+    },
     // 分页导航
     handlePageChange(val) {
-      this.$set(this.query, "pageIndex", val);
-      // this.getData();
+      this.pno = val
+      console.log(val)
+      if (this.query.name == "") {
+        this.getData();
+      } else {
+        this.search()
+      }
+    },
+    search() {
+      let that = this;
+      that.$http.get("http://localhost:8081/api/userSearch?key=" + this.query.name + "&pno=" + this.pno)
+              .then(res => {
+                console.log(res)
+                that.tableData = res.data.list
+                console.log(that.tableData)
+                that.tableData = res.data.list.records
+                that.query.pageIndex = Number(res.data.list.current)  //当前是第几页
+                that.pageTotal = Number(res.data.list.total) //总共条数
+                that.query.pageSize = Number(res.data.list.size)//每页多少条
+                console.log(this.query)
+              })
     }
   }
 };

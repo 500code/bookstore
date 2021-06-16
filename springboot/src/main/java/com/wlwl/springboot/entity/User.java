@@ -15,9 +15,11 @@ public class User {
     private String upwd;
     private String ulogo;
     private int umax=5;
-    private String ubid;
+//    当前借了几次书
+    private int num;
     private int ucount;
     private int ustate;
     private String utoken;
+    private Integer reputation;
 //    private String vip;
 }

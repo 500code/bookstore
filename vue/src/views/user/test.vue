@@ -1,37 +1,45 @@
 <template>
-  <el-button @click="test">测试</el-button>
-  {{ d }}
+  <el-col :offset="15">
+    <div class="handle-box">
+      <el-input v-model="key" placeholder="书名" class="handle-input mr10"></el-input>
+      <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
+    </div>
+  </el-col>
 </template>
-
 <script>
-// import loginService from "@/service/loginService";
-
-export default {
-  name: "test",
-  data() {
-    return {
-      d: ''
-    }
-  },
-  methods: {
-    test() {
-      let that = this;
-      // loginService.ckLogin()
-      const formData = new FormData();
-      formData.append("uname","肥宝")
-      formData.append("upwd","123123")
-      this.$http.post(
-          "http://localhost:8081/api/user/login",formData).then(res => {
-            that.d=res
-      })
+  export default {
+    data(){
+      return{
+        key:""
+      }
+    },
+    created() {
+    },
+    methods: {
+//     // 获取 easy-mock 的模拟数据
+      handleSearch() {
+        this.$http.get("http://localhost:8081/api/search?key=" + this.key)
+                .then(res => {
+                  console.log(res)
+                  console.log(this.query)
+                })
+      },
+      // 分页导航
     }
   }
-}
 </script>
 
 <style scoped>
-.scrollBox {
-  display: flex;
-  flex-wrap: nowrap;
-}
+  .handle-box {
+
+    margin-bottom: 20px;
+  }
+  .handle-input {
+    width: 300px;
+    display: inline-block;
+  }
+  .mr10 {
+    margin-right: 10px;
+  }
+
 </style>

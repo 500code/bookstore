@@ -35,8 +35,6 @@ public class Book {
     private Integer num;
     //  书的简介
     private String bdesc;
-    // 书的状态  0被下架
-    private Integer state;
     //  被借次数
     private Integer count;
 

@@ -164,6 +164,7 @@ export default {
   },
   mounted() {
     this.bar = document.querySelector('.el-scrollbar__thumb')
+    this.bar.style.width='50%'
     console.log(this.bar)
   },
   methods: {
