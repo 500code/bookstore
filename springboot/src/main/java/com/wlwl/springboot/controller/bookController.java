@@ -215,6 +215,7 @@ public class bookController {
         log.setUname(user.getUname());
         log.setOperating(1);
         log.setReputation(user.getReputation());
+        log.setBid(book.getBid());
         logService.save(log);
 
         if (b && b1) {
@@ -224,7 +225,7 @@ public class bookController {
     }
 
     //    还书
-    @GetMapping("returnBook")
+    @PostMapping("returnBook")
     public R returnBook(@RequestParam("uid") int uid, @RequestParam("bid") int bid) {
         User user = userService.getById(uid);
         Book book = bookService.getById(bid);
@@ -251,6 +252,7 @@ public class bookController {
         log.setUname(user.getUname());
         log.setOperating(0);
         log.setReputation(user.getReputation());
+        log.setBid(book.getBid());
         logService.save(log);
 
         if (b && b1) {

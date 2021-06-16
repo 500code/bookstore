@@ -56,9 +56,11 @@ class SpringbootApplicationTests {
 
     @Test
     public void buffer() {
-        String str = "1,2,3,4,5,6";
-        str = str.replaceFirst(","+4, "");
-        System.out.println(str);
+        String record = "1,2,3,4,5,6";
+        String[] split = record.split(",");
+        for (String s : split) {
+            System.out.println(s);
+        }
     }
 
 }

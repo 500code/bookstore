@@ -21,7 +21,6 @@
                     class="table"
                     ref="multipleTable"
                     header-cell-class-name="table-header"
-                    @selection-change="handleSelectionChange"
             >
                 <el-table-column prop="bid" label="ID" width="55" align="center"></el-table-column>
                 <el-table-column prop="bname" label="书名" align="center"></el-table-column>

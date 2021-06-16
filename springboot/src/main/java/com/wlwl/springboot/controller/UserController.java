@@ -1,14 +1,18 @@
 package com.wlwl.springboot.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.wlwl.springboot.entity.Book;
 import com.wlwl.springboot.entity.R;
 import com.wlwl.springboot.entity.User;
 import com.wlwl.springboot.service.UserService;
+import com.wlwl.springboot.service.bookService;
 import com.wlwl.springboot.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -16,47 +20,66 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private bookService bookService;
 
     @PostMapping("/login")
-    public R login(User user){
+    public R login(User user) {
         System.out.println(user);
-        Map<String,Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         QueryWrapper<User> wapper = new QueryWrapper<>();
-        wapper.eq("uname",user.getUname());
-        wapper.eq("upwd",user.getUpwd());
+        wapper.eq("uname", user.getUname());
+        wapper.eq("upwd", user.getUpwd());
         User one = userService.getOne(wapper);
         System.out.println(one);
-        if (one!=null){
-            Map<String,String> payload = new HashMap<>();
-            payload.put("user",one.getUname());
+        if (one != null) {
+            Map<String, String> payload = new HashMap<>();
+            payload.put("user", one.getUname());
             String token = JwtUtils.getToken(payload);
-            map.put("token",token);
+            map.put("token", token);
             return R.ok().code(20000).data(map);
-        }else {
-            map.put("state",false);
-            map.put("msg","查无此账号，请先注册");
+        } else {
+            map.put("state", false);
+            map.put("msg", "查无此账号，请先注册");
             return R.error().code(21003).data(map);
         }
     }
+
     @PostMapping("/register")
-    public R register(User user){
+    public R register(User user) {
         Map<String, Object> map = new HashMap<>();
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("uname", user.getUname());
         queryWrapper.eq("upwd", user.getUpwd());
         int count = userService.count(queryWrapper);
         if (count > 0) {
-            map.put("msg","该账号已存在");
+            map.put("msg", "该账号已存在");
             return R.error().code(21003).data(map);
         } else {
             boolean save = userService.save(user);
-            if(save==true){
-                map.put("msg","注册成功");
+            if (save == true) {
+                map.put("msg", "注册成功");
                 return R.ok().code(20000).data(map);
-            }else {
-                map.put("msg","注册失败");
+            } else {
+                map.put("msg", "注册失败");
                 return R.error().code(20001).data(map);
             }
         }
+    }
+
+    @GetMapping("getBookByUid/{uid}")
+    public R getBookByUid(@PathVariable Integer uid) {
+        System.out.println(uid);
+        User user = userService.getById(uid);
+        String record = user.getRecord();
+        String[] split = record.split(",");
+        List<Book> books = new ArrayList<>();
+        for (String s : split) {
+            books.add(bookService.getById(s));
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("user", user);
+        map.put("books", books);
+        return R.ok().data(map);
     }
 }
