@@ -17,6 +17,8 @@ public class User {
     private int umax=5;
 //    当前借了几次书
     private int num;
+//    当前借了那几本 用，隔开
+    private String record;
     private int ucount;
     private int ustate;
     private String utoken;
