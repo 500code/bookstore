@@ -18,7 +18,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/login")
-    public R login(User user) {
+    public R login(User user){
         System.out.println(user);
         Map<String,Object> map = new HashMap<>();
         QueryWrapper<User> wapper = new QueryWrapper<>();
