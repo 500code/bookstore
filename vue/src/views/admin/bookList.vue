@@ -21,7 +21,6 @@
                     class="table"
                     ref="multipleTable"
                     header-cell-class-name="table-header"
-                    @selection-change="handleSelectionChange"
             >
                 <el-table-column prop="bid" label="ID" width="55" align="center"></el-table-column>
                 <el-table-column prop="bname" label="书名" align="center"></el-table-column>
@@ -96,6 +95,8 @@
 </template>
 
 <script>
+    import {ElMessage} from "element-plus";
+
     export default {
         name: "bookList",
         data() {
@@ -136,12 +137,16 @@
                 this.$http.get("http://localhost:8081/api/getBookList?pno=" + that.pno)
                     .then(res => {
                         console.log(res)
-                        that.tableData = res.data.list.records
-                        that.query.pageIndex = Number(res.data.list.current)  //当前是第几页
-                        that.query.pageTotal = Number(res.data.list.total) //总共条数
-                        that.query.pageSize = Number(res.data.list.size)//每页多少条
-                        for (let i = 0; i < res.data.list.records.length; i++) {
-                            this.tableData[i].taglist = res.data.list.records[i].taglist.split(",")
+                        if(res.code==20000){
+                            that.tableData = res.data.list.records
+                            that.query.pageIndex = Number(res.data.list.current)  //当前是第几页
+                            that.query.pageTotal = Number(res.data.list.total) //总共条数
+                            that.query.pageSize = Number(res.data.list.size)//每页多少条
+                            for (let i = 0; i < res.data.list.records.length; i++) {
+                                this.tableData[i].taglist = res.data.list.records[i].taglist.split(",")
+                            }
+                        }else {
+                            ElMessage.error(res.message)
                         }
                         console.log(this.query)
                     })
@@ -157,8 +162,12 @@
                         const data = new FormData();
                         data.append("bid", row.bid)
                         this.$http.post("http://localhost:8081/api/deleteBook", data).then(res => {
-                            that.$message.success("删除成功");
-                            that.getData()
+                            if (res.code==20000){
+                                that.$message.success("删除成功");
+                                that.getData()
+                            }else {
+                                that.$message.success("删除失败");
+                            }
                             console.log(res)
                         })
 
@@ -186,7 +195,11 @@
                 this.$http.post("http://localhost:8081/api/update", data).then(
                     res => {
                         console.log(res)
-                        that.$message.success(`修改第 ${this.idx + 1} 行成功`);
+                        if (res.code == 20000){
+                            that.$message.success(`修改第 ${this.idx + 1} 行成功`);
+                        }else {
+                            ElMessage.error(res.message);
+                        }
                     }
                 )
             },
@@ -208,14 +221,19 @@
                 that.$http.get("http://localhost:8081/api/search?key=" + this.key + "&pno=" + this.pno)
                     .then(res => {
                         console.log(res)
-                        that.tableData = res.data.list
-                        that.tableData = res.data.list.records
-                        that.query.pageIndex = Number(res.data.list.current)  //当前是第几页
-                        that.query.pageTotal = Number(res.data.list.total) //总共条数
-                        that.query.pageSize = Number(res.data.list.size)//每页多少条
-                        for (let i = 0; i < res.data.list.records.length; i++) {
-                            this.tableData[i].taglist = res.data.list.records[i].taglist.split(",")
+                        if(res.code==20000){
+                            that.tableData = res.data.list
+                            that.tableData = res.data.list.records
+                            that.query.pageIndex = Number(res.data.list.current)  //当前是第几页
+                            that.query.pageTotal = Number(res.data.list.total) //总共条数
+                            that.query.pageSize = Number(res.data.list.size)//每页多少条
+                            for (let i = 0; i < res.data.list.records.length; i++) {
+                                this.tableData[i].taglist = res.data.list.records[i].taglist.split(",")
+                            }
+                        }else {
+                            ElMessage.error("未搜索到");
                         }
+
                         console.log(this.query)
                     })
             },

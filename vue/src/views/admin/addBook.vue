@@ -111,9 +111,12 @@
                             that.$http.post("http://localhost:8081/api/addBook", formData)
                                 .then(res => {
                                     console.log(res)
-                                    ElMessage.success("添加成功");
-                                    that.$router.push("/admin/bookList")
-
+                                    if (res.code == 20000){
+                                        ElMessage.success("添加成功");
+                                        that.$router.push("/admin/bookList")
+                                    }else {
+                                        ElMessage.error(res.message)
+                                    }
                                     // console.log(that.$store.state.token)
                                 })
                         } else {

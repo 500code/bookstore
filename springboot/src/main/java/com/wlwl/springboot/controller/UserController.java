@@ -18,7 +18,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/login")
-    public R login(User user){
+    public R login(User user) {
         System.out.println(user);
         Map<String,Object> map = new HashMap<>();
         QueryWrapper<User> wapper = new QueryWrapper<>();
@@ -50,7 +50,7 @@ public class UserController {
             return R.error().code(21003).data(map);
         } else {
             boolean save = userService.save(user);
-            if(save==true){
+            if(save){
                 map.put("msg","注册成功");
                 return R.ok().code(20000).data(map);
             }else {

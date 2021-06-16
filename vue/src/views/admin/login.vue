@@ -57,12 +57,16 @@ export default {
           formData.append("apwd", this.form.password)
           this.$http.post("http://localhost:8081/api/admin/login", formData)
                   .then(res => {
-                    localStorage.setItem("token", res.data.token)
-                    localStorage.setItem("admin",res.data.admin)
-                    // console.log(res.data.admin)
-                    that.$store.dispatch("set_token", res.data.token)
-                    ElMessage.success('登录成功')
-                    that.$router.push('/admin');
+                    if (res.code == 20000){
+                      localStorage.setItem("token", res.data.token)
+                      localStorage.setItem("admin",res.data.admin)
+                      // console.log(res.data.admin)
+                      that.$store.dispatch("set_token", res.data.token)
+                      ElMessage.success('登录成功')
+                      that.$router.push('/admin');
+                    }else {
+                      ElMessage.error('密码账号错误');
+                    }
                     console.log(res)
                     // console.log(that.$store.state.token)
                   })

@@ -10,7 +10,7 @@ const routes = [
         path: '/index',
         name: "index",
         component: () => import("../views/user/index")
-    },  {
+    }, {
         path: '/test',
         name: "test",
         component: () => import("../views/user/test")
@@ -19,6 +19,11 @@ const routes = [
         path: '/login',
         name: "login",
         component: () => import("../views/user/login")
+    },
+    {
+        path: '/center',
+        name: "center",
+        component: () => import("../views/user/center")
     },
     {
         path: '/register',

@@ -50,6 +50,8 @@
 <script>
 
 
+import {ElMessage} from "element-plus";
+
 export default {
   name: "userReadList",
   data() {
@@ -96,11 +98,15 @@ export default {
       that.$http.get("http://localhost:8081/api/userRanking?pno=" + that.pno)
               .then(res => {
                 console.log(res)
-                that.tableData = res.data.list.records
-                console.log(that.tableData)
-                that.query.pageIndex = Number(res.data.list.current)  //当前是第几页
-                that.pageTotal = Number(res.data.list.total) //总共条数
-                that.query.pageSize = Number(res.data.list.size)//每页多少条
+                if(res.code==20000){
+                  that.tableData = res.data.list.records
+                  console.log(that.tableData)
+                  that.query.pageIndex = Number(res.data.list.current)  //当前是第几页
+                  that.pageTotal = Number(res.data.list.total) //总共条数
+                  that.query.pageSize = Number(res.data.list.size)//每页多少条
+                }else {
+                  ElMessage.error("暂无数据");
+                }
               })
     },
     handleSearch(){
@@ -120,13 +126,17 @@ export default {
       let that = this;
       that.$http.get("http://localhost:8081/api/userSearch?key=" + this.query.name + "&pno=" + this.pno)
               .then(res => {
+                if(res.code==20000){
+                  that.tableData = res.data.list
+                  console.log(that.tableData)
+                  that.tableData = res.data.list.records
+                  that.query.pageIndex = Number(res.data.list.current)  //当前是第几页
+                  that.pageTotal = Number(res.data.list.total) //总共条数
+                  that.query.pageSize = Number(res.data.list.size)//每页多少条
+                }else {
+                  ElMessage.error("未搜索到");
+                }
                 console.log(res)
-                that.tableData = res.data.list
-                console.log(that.tableData)
-                that.tableData = res.data.list.records
-                that.query.pageIndex = Number(res.data.list.current)  //当前是第几页
-                that.pageTotal = Number(res.data.list.total) //总共条数
-                that.query.pageSize = Number(res.data.list.size)//每页多少条
                 console.log(this.query)
               })
     }

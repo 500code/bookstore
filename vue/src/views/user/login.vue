@@ -62,6 +62,8 @@
                                     that.$store.dispatch("set_token", res.data.token)
                                     ElMessage.success('登录成功')
                                     that.$router.push('/index');
+                                }else {
+                                    ElMessage.error('密码账号错误');
                                 }
                                 console.log(res)
                                 console.log(that.$store.state.token)

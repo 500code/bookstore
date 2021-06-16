@@ -30,5 +30,8 @@ public class log {
     private Integer reputation;
     //    还书0   借书1
     private Integer operating;
+    //    书的id
+    private Integer bid;
+
 
 }

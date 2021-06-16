@@ -10,11 +10,7 @@
             </div>
             <el-col :offset="15">
                 <div class="handle-box">
-                    <el-date-picker
-                            v-model="value1"
-                            type="date"
-                            placeholder="选择日期">
-                    </el-date-picker>
+                    <el-input v-model="query.name" placeholder="书名" class="handle-input mr10"></el-input>
                     <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
                 </div>
             </el-col>
@@ -27,9 +23,11 @@
                     ref="multipleTable"
                     @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="uid" label="ID" width="130" align="center"></el-table-column>
+                <el-table-column prop="id" label="日志编号" width="130" align="center"></el-table-column>
                 <el-table-column prop="ldate" label="日期" sortable width="180" align="center"></el-table-column>
+                <el-table-column prop="uid" label="用户ID" width="130" align="center"></el-table-column>
                 <el-table-column prop="uname" label="用户名" align="center"></el-table-column>
+                <el-table-column prop="bid" label="书籍ID" width="130" align="center"></el-table-column>
                 <el-table-column prop="bname" label="书名" align="center"></el-table-column>
                 <el-table-column prop="reputation" label="信誉值" align="center"></el-table-column>
                 <el-table-column label="操作" align="center">
@@ -58,6 +56,8 @@
 <script>
 
 
+    import {ElMessage} from "element-plus";
+
     export default {
         name: "log",
         data() {
@@ -85,7 +85,7 @@
                 pageTotal: 0,
                 form: {},
                 idx: -1,
-                id: -1
+                id: -1,
             }
         },
 //   },
@@ -117,24 +117,49 @@
                                 }
                             }
                             console.log(res)
+                        } else {
+                            ElMessage.error("暂无数据");
                         }
                     })
-                // fetchData(this.query).then(res => {
-                //   console.log(res);
-                //   this.tableData = res.list;
-                //   this.pageTotal = res.pageTotal || 50;
-                // });
             },
-//     // 触发搜索按钮
-//     handleSearch() {
-//       this.$set(this.query, "pageIndex", 1);
-//       this.getData();
-//     },
+            // 触发搜索按钮
+            handleSearch() {
+                this.search();
+            },
 
+            search() {
+                let that = this;
+                console.log(that.key)
+                that.$http.get("http://localhost:8081/api/searchLog?key=" + this.query.name + "&pno=" + this.pno)
+                    .then(res => {
+                        console.log(res)
+                        console.log(this.query.name)
+                        if (res.code == 20000) {
+                            that.tableData = res.data.list.records
+                            that.query.pageIndex = Number(res.data.list.current)  //当前是第几页
+                            that.pageTotal = Number(res.data.list.total) //总共条数
+                            that.query.pageSize = Number(res.data.list.size)//每页多少条
+                            for (let i = 0; i < res.data.list.records.length; i++) {
+                                if (res.data.list.records[i].operating == 1) {
+                                    that.tableData[i].log = "借书"
+                                } else {
+                                    that.tableData[i].log = "还书"
+                                }
+                            }
+                        } else {
+                            ElMessage.error("未搜索到");
+                        }
+                        console.log(this.query)
+                    })
+            },
             // 分页导航
             handlePageChange(val) {
                 this.pno = val
-                this.getData();
+                if (this.query.name == "") {
+                    this.getData();
+                } else {
+                    this.search()
+                }
             }
         }
     };

@@ -16,7 +16,7 @@
           <el-menu-item index="5"><i class="el-icon-bell icon"></i>消息</el-menu-item>
           <el-submenu index="6">
             <template #title><i class="el-icon-user icon"></i>用户</template>
-            <el-menu-item index="2-1">个人中心</el-menu-item>
+            <el-menu-item index="2-1"><router-link to="/center" style="width: 180px;display: block">个人中心</router-link></el-menu-item>
             <el-menu-item
                 index="2-3"><router-link to="/login" style="width: 180px;display: block">退出登录</router-link></el-menu-item>
           </el-submenu>
