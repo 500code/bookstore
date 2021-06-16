@@ -63,6 +63,8 @@
 <script>
 
 
+    import {ElMessage} from "element-plus";
+
     export default {
         name: "readList",
         data() {
@@ -107,12 +109,16 @@
                 that.$http.get("http://localhost:8081/api/bookRanking?pno=" + that.pno)
                     .then(res => {
                         console.log(res)
-                        that.tableData = res.data.list.records
-                        that.query.pageIndex = Number(res.data.list.current)  //当前是第几页
-                        that.pageTotal = Number(res.data.list.total) //总共条数
-                        that.query.pageSize = Number(res.data.list.size)//每页多少条
-                        for (let i = 0; i < res.data.list.records.length; i++) {
-                            this.tableData[i].taglist = res.data.list.records[i].taglist.split(",")
+                        if (res.code == 20000){
+                            that.tableData = res.data.list.records
+                            that.query.pageIndex = Number(res.data.list.current)  //当前是第几页
+                            that.pageTotal = Number(res.data.list.total) //总共条数
+                            that.query.pageSize = Number(res.data.list.size)//每页多少条
+                            for (let i = 0; i < res.data.list.records.length; i++) {
+                                this.tableData[i].taglist = res.data.list.records[i].taglist.split(",")
+                            }
+                        }else {
+                            ElMessage.error("暂无数据");
                         }
                     })
 
@@ -126,8 +132,8 @@
                     this.search()
                 }
             },
-            handleSearch(){
-              this.search()
+            handleSearch() {
+                this.search()
             },
             search() {
                 let that = this;
@@ -135,14 +141,18 @@
                 that.$http.get("http://localhost:8081/api/search?key=" + this.query.name + "&pno=" + this.pno)
                     .then(res => {
                         console.log(res)
-                        that.tableData = res.data.list
-                        console.log(that.tableData)
-                        that.tableData = res.data.list.records
-                        that.query.pageIndex = Number(res.data.list.current)  //当前是第几页
-                        that.pageTotal = Number(res.data.list.total) //总共条数
-                        that.query.pageSize = Number(res.data.list.size)//每页多少条
-                        for (let i = 0; i < res.data.list.records.length; i++) {
-                            this.tableData[i].taglist = res.data.list.records[i].taglist.split(",")
+                        if (res.code == 20000) {
+                            that.tableData = res.data.list
+                            console.log(that.tableData)
+                            that.tableData = res.data.list.records
+                            that.query.pageIndex = Number(res.data.list.current)  //当前是第几页
+                            that.pageTotal = Number(res.data.list.total) //总共条数
+                            that.query.pageSize = Number(res.data.list.size)//每页多少条
+                            for (let i = 0; i < res.data.list.records.length; i++) {
+                                this.tableData[i].taglist = res.data.list.records[i].taglist.split(",")
+                            }
+                        }else {
+                            ElMessage.error("未搜索到");
                         }
                         console.log(this.query)
                     })

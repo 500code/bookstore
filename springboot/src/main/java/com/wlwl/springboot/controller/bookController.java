@@ -34,12 +34,12 @@ public class bookController {
     @Autowired
     private logService logService;
 
-    //查询书记
+    //查询书籍
     @GetMapping("/getBookList")
     public R getBookList(@RequestParam(value = "pno", defaultValue = "1") int pno) {
         IPage<Book> page = new Page<>(pno, 4);
         IPage<Book> page1 = bookService.page(page);
-        if (page1 != null) {
+        if (page1.getTotal()!=0) {
             return R.ok().code(20000).data("list", page1);
         } else {
             return R.error().code(21003);
@@ -74,12 +74,12 @@ public class bookController {
 
     //搜索
     @GetMapping("/search")
-    public R search(String key, @RequestParam(value = "pno", defaultValue = "1") int pno) {
+    public R search(String key,@RequestParam(value = "pno", defaultValue = "1") int pno) {
         IPage<Book> page = new Page<>(pno, 4);
         QueryWrapper<Book> wrapper = new QueryWrapper<>();
         wrapper.like("bname", key).or().like("author", key).or().like("taglist", key);
         IPage<Book> page1 = bookService.page(page, wrapper);
-        if (page1 != null) {
+        if (page1.getTotal()!=0) {
             System.out.println(page1);
             return R.ok().code(20000).data("list", page1);
         }
@@ -94,7 +94,7 @@ public class bookController {
         wrapper.eq("bid", book.getBid());
         boolean falg = bookService.update(book, wrapper);
         if (falg) {
-            return R.ok();
+            return R.ok().code(20000);
         }
         return R.error();
     }
@@ -105,7 +105,7 @@ public class bookController {
         System.out.println(bid);
         boolean b = bookService.removeById(bid);
         if (b) {
-            return R.ok();
+            return R.ok().code(20000);
         }
         return R.error();
     }
@@ -118,8 +118,8 @@ public class bookController {
         wrapper.orderByDesc("count");
         IPage<Book> page1 = bookService.page(page, wrapper);
         System.out.println(page1);
-        if (page1 != null) {
-            return R.ok().data("list", page1);
+        if (page1.getTotal()!=0) {
+            return R.ok().code(20000).data("list", page1);
         }
         return R.error();
     }
@@ -132,8 +132,8 @@ public class bookController {
         wrapper.orderByDesc("ucount");
         IPage<User> page1 = userService.page(page);
         System.out.println(page1);
-        if (page1 != null) {
-            return R.ok().data("list", page1);
+        if (page1.getTotal()!=0) {
+            return R.ok().code(20000).data("list", page1);
         }
         return R.error();
     }
@@ -146,7 +146,7 @@ public class bookController {
         wrapper.like("uname", key);
         IPage<User> page1 = userService.page(page, wrapper);
         System.out.println(page1);
-        if (page1 != null) {
+        if (page1.getTotal()!=0) {
             System.out.println(page1);
             return R.ok().code(20000).data("list", page1);
         }
@@ -219,7 +219,7 @@ public class bookController {
         logService.save(log);
 
         if (b && b1) {
-            return R.ok().message("借书成功");
+            return R.ok().code(20000).message("借书成功");
         }
         return R.error().message("借书失败");
     }
@@ -256,7 +256,7 @@ public class bookController {
         logService.save(log);
 
         if (b && b1) {
-            return R.ok().message("还书成功");
+            return R.ok().code(20000).message("还书成功");
         }
         return R.error().message("还书失败");
     }

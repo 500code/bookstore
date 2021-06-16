@@ -104,8 +104,12 @@ export default {
           formData.append("upwd", this.ruleForm.upwd)
           this.$http.post("http://localhost:8081/api/user/register", formData)
                   .then(res => {
+                    if (res.code==20000){
+                      ElMessage.success('注册成功')
+                    }else {
+                      ElMessage.error('注册失败');
+                    }
                     console.log(res)
-                    ElMessage.success('注册成功')
                   })
           console.log(valid)
           localStorage.setItem("uname", this.ruleForm.uname)
