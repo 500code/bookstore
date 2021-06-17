@@ -25,7 +25,7 @@ export default {
           trigger: 'axis'
         },
         legend: {
-          data: ['借书', '还书']
+          data: ['还书', '借书']
         },
         xAxis: {
           type: 'category',
@@ -35,20 +35,19 @@ export default {
           type: 'value'
         },
         series: [{
-          name: "借书",
-          data: [820, 932, 901, 934, 1290, 1330, 1320],
+          name: "还书",
+          data: [82, 92, 91, 93, 120, 130, 130],
           type: 'line',
           smooth: true
         },
           {
-            name: "还书",
-            data: [82, 92, 91, 93, 120, 130, 130],
+            name: "借书",
+            data: [820, 932, 901, 934, 1290, 1330, 1320],
             type: 'line',
             smooth: true
           }
         ]
       },
-      date: new Date()
     }
   },
   created() {
@@ -56,8 +55,15 @@ export default {
   },
   methods: {
     getData() {
+      let that = this;
       this.$http.get("http://localhost:8081/api/getEchats").then(res => {
         console.log(res)
+        if (res.code == '20000') {
+          that.option.xAxis.data = res.data.data.dateList
+          that.option.series[0].data = res.data.data.outCountList
+          that.option.series[1].data = res.data.data.inCountList
+          console.log(that.option)
+        }
       })
     }
   }

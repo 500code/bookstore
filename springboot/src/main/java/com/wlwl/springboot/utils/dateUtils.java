@@ -4,22 +4,19 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class dateUtils {
-    public static Map<String, Object> getPastDate(int past) {
-        Map<String, Object> map = new HashMap<>();
-        List<Date> dateList = new ArrayList<>();
-        List<String> dates = new ArrayList<>();
-        for (int i = 0; i < past; i++) {
+    public static List<String> getPastDate(int past) {
+        List<String> dateList = new ArrayList<>();
+        for (int i = past; i > 0; i--) {
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) - i);
             Date today = calendar.getTime();
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             String result = format.format(today);
-            dateList.add(today);
-            dates.add(result);
+            dateList.add(result);
         }
-        map.put("dateList", dateList);
-        map.put("dates", dates);
-        return map;
+        System.out.println(dateList);
+
+        return dateList;
     }
 
     public static String format(Date date) {

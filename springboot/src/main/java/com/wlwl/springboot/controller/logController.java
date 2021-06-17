@@ -12,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -53,24 +51,30 @@ public class logController {
     @GetMapping("getEchats")
     public R getEchats() {
 //        获取最近七天
-        Map<String, Object> map = dateUtils.getPastDate(7);
-        List<Date> dateList = (List<Date>) map.get("dateList");
-        System.out.println(dateList);
-        System.out.println(map.get("dates"));
-
         QueryWrapper<log> wrapper = new QueryWrapper<>();
-        wrapper.eq("operating", "0");//还书
-        for (Date date : dateList) {
-//            wrapper.eq("")
+        List<String> dateList = dateUtils.getPastDate(7);
+        Map<String, Object> map = new HashMap<>();
+        map.put("dateList", dateList);
+
+//        还书
+        List<Integer> countList = new ArrayList<>();
+        for (String date : dateList) {
+            wrapper.eq("operating", "0");//还书
+            wrapper.eq("sdate", date);
+            countList.add(logService.count(wrapper));
+            wrapper.clear();
         }
-        int outCount = logService.count(wrapper);
+        map.put("outCountList", countList);
 
+        //        还书
+        countList.clear();
+        for (String date : dateList) {
+            wrapper.eq("operating", "1");//借书
+            wrapper.eq("sdate", date);
+            countList.add(logService.count(wrapper));
+        }
+        map.put("inCountList", countList);
 
-
-        wrapper = new QueryWrapper<>();
-        wrapper.eq("operating", "1");//借书
-        int inCount = logService.count(wrapper);
-
-        return R.ok();
+        return R.ok().data("data",map);
     }
 }
