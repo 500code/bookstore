@@ -32,7 +32,6 @@ public class log {
     private Integer operating;
     //    书的id
     private Integer bid;
-
     private String sdate;
 
 }

@@ -64,17 +64,25 @@ public class logController {
             countList.add(logService.count(wrapper));
             wrapper.clear();
         }
+        System.out.println("还书的list===========");
+        System.out.println(countList);
         map.put("outCountList", countList);
 
-        //        还书
-        countList.clear();
+        //   借书
+        countList=new ArrayList<>();
         for (String date : dateList) {
             wrapper.eq("operating", "1");//借书
             wrapper.eq("sdate", date);
             countList.add(logService.count(wrapper));
+            wrapper.clear();
         }
+        System.out.println("借书的list===========");
+        System.out.println(countList);
         map.put("inCountList", countList);
 
-        return R.ok().data("data",map);
+        System.out.println("===============");
+        System.out.println(map);
+
+        return R.ok().data("data", map);
     }
 }

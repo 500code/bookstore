@@ -71,6 +71,32 @@ public class UserController {
     }
 
     @GetMapping("getBookByUid/{uid}")
+//    public R getBookByUid(@PathVariable Integer uid) {
+//        System.out.println(uid);
+//        Map<String, Object> map = new HashMap<>();
+//        User user = userService.getById(uid);
+//        map.put("user", user);
+//        String record = user.getRecord();
+//        System.out.println(record);
+//        if (StringUtils.hasLength(record)) {
+//            List<Book> books = new ArrayList<>();
+//            if (!record.contains(",")) {
+//                System.out.println("进来了");
+//                books.add(bookService.getById(record));
+//                map.put("books", books);
+//                return R.ok().data(map);
+//            }
+//            String[] split = record.split(",");
+//
+//            for (String s : split) {
+//                books.add(bookService.getById(s));
+//            }
+//            map.put("books", books);
+//            return R.ok().data(map);
+//        }
+//        return R.ok().data(map);
+//    }
+
     public R getBookByUid(@PathVariable Integer uid) {
         System.out.println(uid);
         Map<String, Object> map = new HashMap<>();
@@ -87,6 +113,8 @@ public class UserController {
             }
             String[] split = record.split(",");
             for (String s : split) {
+                System.out.println("s=============="+s);
+                System.out.println("=========================="+ bookService.getById(s));
                 books.add(bookService.getById(s));
             }
             map.put("books", books);
@@ -94,4 +122,5 @@ public class UserController {
         }
         return R.ok().data(map);
     }
+
 }

@@ -114,7 +114,7 @@ public class bookController {
     //书籍借阅排行
     @GetMapping("/bookRanking")
     public R bookRanking(@RequestParam(value = "pno", defaultValue = "1") int pno) {
-        IPage<Book> page = new Page<>(pno, 5);
+        IPage<Book> page = new Page<>(pno, 4);
         QueryWrapper<Book> wrapper = new QueryWrapper<>();
         wrapper.orderByDesc("count");
         IPage<Book> page1 = bookService.page(page, wrapper);
@@ -128,7 +128,7 @@ public class bookController {
     //个人借阅排行
     @GetMapping("userRanking")
     public R userRanking(@RequestParam(value = "pno", defaultValue = "1") int pno) {
-        IPage<User> page = new Page<>();
+        IPage<User> page = new Page<>(pno,4);
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.orderByDesc("ucount");
         IPage<User> page1 = userService.page(page);
