@@ -10,7 +10,7 @@
       </div>
       <el-col :offset="15">
         <div class="handle-box">
-          <el-input v-model="query.name" placeholder="请输入id" class="handle-input mr10"></el-input>
+          <el-input v-model="query.name" placeholder="请输入用户名" class="handle-input mr10"></el-input>
           <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
         </div>
       </el-col>

@@ -16,7 +16,7 @@
                 </div>
                 <div class="user-info-rep">信誉度：<span class="user-info-imp">{{ user.reputation }}</span>
                 </div>
-                <div class="user-info-rep">可借次数：<span class="user-info-imp">{{ user.num }}/5</span>
+                <div class="user-info-rep">可借次数：<span class="user-info-imp">{{5- user.num }}/5</span>
                 </div>
               </div>
             </div>

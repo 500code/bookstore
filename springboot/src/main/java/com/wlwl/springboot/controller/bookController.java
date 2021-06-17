@@ -13,7 +13,7 @@ import com.wlwl.springboot.entity.log;
 import com.wlwl.springboot.service.UserService;
 import com.wlwl.springboot.service.bookService;
 import com.wlwl.springboot.service.logService;
-import com.wlwl.springboot.vo.bookVo;
+import com.wlwl.springboot.utils.ArrToList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +39,7 @@ public class bookController {
     public R getBookList(@RequestParam(value = "pno", defaultValue = "1") int pno) {
         IPage<Book> page = new Page<>(pno, 4);
         IPage<Book> page1 = bookService.page(page);
-        if (page1.getTotal()!=0) {
+        if (page1.getTotal() != 0) {
             return R.ok().code(20000).data("list", page1);
         } else {
             return R.error().code(21003);
@@ -74,12 +74,12 @@ public class bookController {
 
     //搜索
     @GetMapping("/search")
-    public R search(String key,@RequestParam(value = "pno", defaultValue = "1") int pno) {
+    public R search(String key, @RequestParam(value = "pno", defaultValue = "1") int pno) {
         IPage<Book> page = new Page<>(pno, 4);
         QueryWrapper<Book> wrapper = new QueryWrapper<>();
         wrapper.like("bname", key).or().like("author", key).or().like("taglist", key);
         IPage<Book> page1 = bookService.page(page, wrapper);
-        if (page1.getTotal()!=0) {
+        if (page1.getTotal() != 0) {
             System.out.println(page1);
             return R.ok().code(20000).data("list", page1);
         }
@@ -118,7 +118,7 @@ public class bookController {
         wrapper.orderByDesc("count");
         IPage<Book> page1 = bookService.page(page, wrapper);
         System.out.println(page1);
-        if (page1.getTotal()!=0) {
+        if (page1.getTotal() != 0) {
             return R.ok().code(20000).data("list", page1);
         }
         return R.error();
@@ -132,7 +132,7 @@ public class bookController {
         wrapper.orderByDesc("ucount");
         IPage<User> page1 = userService.page(page);
         System.out.println(page1);
-        if (page1.getTotal()!=0) {
+        if (page1.getTotal() != 0) {
             return R.ok().code(20000).data("list", page1);
         }
         return R.error();
@@ -146,7 +146,7 @@ public class bookController {
         wrapper.like("uname", key);
         IPage<User> page1 = userService.page(page, wrapper);
         System.out.println(page1);
-        if (page1.getTotal()!=0) {
+        if (page1.getTotal() != 0) {
             System.out.println(page1);
             return R.ok().code(20000).data("list", page1);
         }
@@ -156,10 +156,8 @@ public class bookController {
     //借书
     @GetMapping("/getBook")
     public R getBook(@RequestParam("uid") int uid, @RequestParam("bid") int bid) {
-        System.out.println(uid + "=======" + bid);
         User user = userService.getById(uid);
         Book book = bookService.getById(bid);
-
 //        查看库存与用户是否还能借书
         if (user.getNum() >= 5) {
             return R.error().message("已超出借书最大值，无法继续借书");
@@ -193,12 +191,11 @@ public class bookController {
         if (StringUtils.hasLength(book.getRecord())) {  //当前还借了其他的书的情况
             buffer.append(book.getRecord());
             buffer.append(",");
-//            添加这次借书的bid
+//            添加这次借书的uid
             buffer.append(user.getUid());
         } else {  //当前未借其他的书
             buffer.append(user.getUid());
         }
-
         book.setRecord(buffer.toString());//        更新这本书借书人名单
         book.setNum(book.getNum() - 1); //库存减一
         book.setCount(book.getCount() + 1); //被借次数加一
@@ -229,21 +226,24 @@ public class bookController {
     public R returnBook(@RequestParam("uid") int uid, @RequestParam("bid") int bid) {
         User user = userService.getById(uid);
         Book book = bookService.getById(bid);
-
 //       处理user
         user.setNum(user.getNum() - 1); //能借书次数加一
-        String record = user.getRecord().replaceFirst("," + bid, "");
+        String record = user.getRecord();
+        System.out.println(record);
+        record = ArrToList.getRecord(record, bid);
+        System.out.println(record);
         user.setRecord(record);
 
 //        处理book
-        book.setNum(book.getNum() - 1); //库存加一
-        record = book.getRecord().replaceFirst("," + uid, "");
+        record = book.getRecord();
+        book.setNum(book.getNum() + 1); //库存加一
+        record = ArrToList.getRecord(record, uid);
+        System.out.println(record);
         book.setRecord(record);
 
         //        更新数据库
         boolean b = userService.saveOrUpdate(user);
         boolean b1 = bookService.saveOrUpdate(book);
-
         //        添加日志
         log log = new log();
         log.setLdate(new Date());
@@ -259,5 +259,17 @@ public class bookController {
             return R.ok().code(20000).message("还书成功");
         }
         return R.error().message("还书失败");
+    }
+
+    @GetMapping("getCount")
+    public R getCount() {
+        int count = bookService.count();
+        int log = logService.count();
+        int ucount=userService.count();
+        Map<String,Object> map = new HashMap();
+        map.put("count", count);
+        map.put("log", log);
+        map.put("ucount", ucount);
+        return R.ok().data(map);
     }
 }

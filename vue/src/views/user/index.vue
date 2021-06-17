@@ -10,7 +10,7 @@
     <el-main>
       <div class="lay">
         <div class="scroll">
-          <el-carousel height="350px">
+          <el-carousel height="350px" style="background: #fff">
             <el-carousel-item v-for="item in imgList" :key="item">
               <span style="line-height: 350px;font-size: 70px">广告位待租...</span>
             </el-carousel-item>
@@ -150,11 +150,9 @@ export default {
   mounted() {
     this.bar = document.querySelector('.el-scrollbar__thumb')
     this.bar.style.width = '50%'
-    console.log(this.bar)
   },
   methods: {
     scroll() {
-      console.log(this.src = "0d4e2e2e36784a4c885036ade2aadc7f.jpg")
       this.time = setInterval(() => {
         if (this.x < -1200) {
           this.x = 0;
@@ -165,7 +163,6 @@ export default {
     out() {
       clearInterval(this.time2);
       this.bar.style.transform = 'translateX(' + this.a++ + 'px)'
-      console.log(this.bar)
       clearInterval(this.time);
     },
     test() {
@@ -183,34 +180,26 @@ export default {
       let that = this;
       this.$http.get("http://localhost:8081/api/index/popularBooks?pno=" + that.pno)
           .then(res => {
-            console.log(res)
             if (res.code == 20000) {
               that.tableData = res.data.list.records
-              console.log(that.tableData)
               that.query.pageIndex = Number(res.data.list.current)  //当前是第几页
               that.query.pageTotal = Number(res.data.list.total) //总共条数
               that.query.pageSize = Number(res.data.list.size)//每页多少条
             } else {
               ElMessage.error("暂无数据")
             }
-            console.log(this.query)
           })
-          ,
-          that.$http.get("http://localhost:8081/api/index/newBooks")
-              .then(res => {
-                console.log("新书==", res)
-                if (res.code == 20000) {
-                  that.table = res.data.list
-                } else {
-                  ElMessage.error("借书失败")
-                }
-                console.log(this.query)
-              })
+      this.$http.get("http://localhost:8081/api/index/newBooks")
+          .then(res => {
+            if (res.code == 20000) {
+              that.table = res.data.list
+            } else {
+              ElMessage.error("请求失败")
+            }
+          })
     },
     //借书事件
     borrowBooks(e) {
-      console.log(e)
-      console.log(this.$store.state.uid);
       let that = this
       if (!this.$store.state.uid) {
         ElMessage.error("还没登录，请登录")
@@ -223,9 +212,8 @@ export default {
             if (res.code == 20000) {
               ElMessage.success("借书成功")
             } else {
-              ElMessage.error("借书失败")
+              ElMessage.error(res.message)
             }
-            console.log(this.query)
           })
     },
     //分页导航
@@ -242,6 +230,7 @@ export default {
 .el-header {
   background-color: #545c64;
 }
+
 .lay {
   width: 1200px;
   margin: 0 auto;

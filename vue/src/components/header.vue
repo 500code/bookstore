@@ -27,7 +27,7 @@
         <!-- 用户名下拉菜单 -->
         <el-dropdown class="user-name" trigger="click" @command="handleCommand">
                     <span class="el-dropdown-link">
-                        {{username}}
+                        {{name}}
                         <i class="el-icon-caret-bottom"></i>
                     </span>
           <template #dropdown>
@@ -47,7 +47,7 @@
 export default {
   data() {
     return {
-      name: localStorage.getItem("admin"),
+      name: sessionStorage.getItem("anmae"),
       message: 2
     };
   },

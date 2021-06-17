@@ -36,8 +36,8 @@
             <div class="grid-content grid-con-1">
               <i class="el-icon-user-solid grid-con-icon"></i>
               <div class="grid-cont-right">
-                <div class="grid-num">1234</div>
-                <div>已借图书数量</div>
+                <div class="grid-num">{{ ucount }}</div>
+                <div>会员数量</div>
               </div>
             </div>
           </el-card>
@@ -47,7 +47,7 @@
             <div class="grid-content grid-con-2">
               <i class="el-icon-message-solid grid-con-icon"></i>
               <div class="grid-cont-right">
-                <div class="grid-num">321</div>
+                <div class="grid-num">{{ log }}</div>
                 <div>系统消息</div>
               </div>
             </div>
@@ -58,8 +58,8 @@
             <div class="grid-content grid-con-3">
               <i class="el-icon-notebook-2 grid-con-icon"></i>
               <div class="grid-cont-right">
-                <div class="grid-num">5000</div>
-                <div>剩余图书</div>
+                <div class="grid-num">{{ count }}</div>
+                <div>总共图书</div>
               </div>
             </div>
           </el-card>
@@ -82,9 +82,7 @@
             <template #default="scope">
               <div
                   class="todo-item"
-                  :class="{
-                                        'todo-item-del': scope.row.status,
-                                    }"
+                  :class="{'todo-item-del': scope.row.status}"
               >{{ scope.row.title }}
               </div>
             </template>
@@ -106,7 +104,10 @@ export default {
   name: "home",
   data() {
     return {
-      name: localStorage.getItem("admin"),
+      name: sessionStorage.getItem("anmae"),
+      count: '',
+      log: '',
+      ucount: '',
       todoList: [
         {
           title: "今天要修复100个bug",
@@ -147,6 +148,22 @@ export default {
           src: require('../../assets/100.png')
         }
       ]
+    }
+  },
+  created() {
+    this.getAdmin()
+  }
+  ,
+  methods: {
+    getAdmin() {
+      let that = this;
+      this.$http.get("http://localhost:8081/api/getCount").then(
+          res => {
+            that.count = res.data.count
+            that.log = res.data.log
+            that.ucount = res.data.ucount
+
+          })
     }
   }
 }

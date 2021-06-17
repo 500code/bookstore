@@ -56,11 +56,8 @@ class SpringbootApplicationTests {
 
     @Test
     public void buffer() {
-        String record = "1,2,3,4,5,6";
-        String[] split = record.split(",");
-        for (String s : split) {
-            System.out.println(s);
-        }
+        Integer a=null;
+//        System.out.println(a+1);
     }
 
 }
