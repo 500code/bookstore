@@ -34,4 +34,16 @@ public class indexController {
         }
         return R.error().code(21003);
     }
+    @GetMapping("/newBooks")
+    //新书图书推荐
+    public R newrBooks() {
+        QueryWrapper<Book> wrapper = new QueryWrapper<>();
+        wrapper.orderByDesc("bid").last("limit 0,8");
+        List<Book> list = bookService.list( wrapper);
+        System.out.println(list);
+        if (list != null) {
+            return R.ok().code(20000).data("list",list);
+        }
+        return R.error().code(21003);
+    }
 }
