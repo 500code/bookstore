@@ -7,10 +7,10 @@
   margin: 0;
   padding: 0;
 }
-a{
+
+a {
   text-decoration: none;
   color: #fff;
 }
 
 </style>
-

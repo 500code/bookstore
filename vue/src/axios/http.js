@@ -15,14 +15,13 @@ axios.defaults.timeout = 10000 // 超时时间
 // http request 拦截器
 axios.interceptors.request.use(
     config => {
-        console.log(store)
+        // console.log(store)
         if (store.state.token) {
             if (config.url.indexOf('login') > -1) {
                 localStorage.setItem('token', '')
                 config.headers.Authorization = ''
             } else {
                 config.headers.Authorization = store.state.token
-                console.log("token==>", store.state.token)
             }
         }
         return config
@@ -37,7 +36,6 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
     response => {
         if (response.status) {
-            console.log("地址=>", window.location.pathname)
             console.log("response==>", response)
             if (response.data.code == '401') {
                 ElMessage.error('登录过期,请重新登录')
