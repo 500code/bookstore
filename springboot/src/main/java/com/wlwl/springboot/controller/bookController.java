@@ -256,6 +256,7 @@ public class bookController {
         log.setReputation(user.getReputation());
         log.setBid(book.getBid());
         log.setSdate(dateUtils.format(new Date()));
+//
         logService.save(log);
 
         if (b && b1) {
