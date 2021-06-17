@@ -28,7 +28,7 @@ public class logController {
         wrapper.orderByDesc("ldate");
         IPage<log> page1 = logService.page(page, wrapper);
         System.out.println(page1);
-        if (page1.getTotal()!=0) {
+        if (page1.getTotal() != 0) {
             return R.ok().code(20000).data("list", page1);
         }
         return R.error().code(21003);
@@ -36,13 +36,26 @@ public class logController {
 
     @GetMapping("/searchLog")
     public R searchLog(String key, @RequestParam(value = "pno", defaultValue = "1") int pno) {
-        IPage<log> page = new Page<>(pno,4);
+        IPage<log> page = new Page<>(pno, 4);
         QueryWrapper<log> wrapper = new QueryWrapper<>();
         wrapper.like("bname", key);
         IPage<log> page1 = logService.page(page, wrapper);
-        if (page1.getTotal()!=0) {
+        if (page1.getTotal() != 0) {
             return R.ok().code(20000).data("list", page1);
         }
         return R.error().code(21003);
+    }
+
+    //    表格
+    @GetMapping("getEchats")
+    public R getEchats() {
+        QueryWrapper<log> wrapper = new QueryWrapper<>();
+        wrapper.eq("operating", "0");//还书
+        int outCount = logService.count(wrapper);
+        wrapper = new QueryWrapper<>();
+        wrapper.eq("operating", "1");//借书
+        int inCount=logService.count(wrapper);
+
+        return R.ok();
     }
 }

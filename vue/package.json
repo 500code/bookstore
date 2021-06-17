@@ -10,10 +10,12 @@
   "dependencies": {
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "echarts": "^5.1.2",
     "element-plus": "^1.0.2-beta.46",
     "js-base64": "^3.6.1",
     "vue": "^3.0.0",
     "vue-axios": "^3.2.4",
+    "vue-echarts": "^6.0.0-rc.6",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.1"
   },
