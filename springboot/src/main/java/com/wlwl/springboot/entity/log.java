@@ -33,5 +33,6 @@ public class log {
     //    书的id
     private Integer bid;
 
+    private String sdate;
 
 }

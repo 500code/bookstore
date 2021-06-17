@@ -14,6 +14,7 @@ import com.wlwl.springboot.service.UserService;
 import com.wlwl.springboot.service.bookService;
 import com.wlwl.springboot.service.logService;
 import com.wlwl.springboot.utils.ArrToList;
+import com.wlwl.springboot.utils.dateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -213,6 +214,7 @@ public class bookController {
         log.setOperating(1);
         log.setReputation(user.getReputation());
         log.setBid(book.getBid());
+        log.setSdate(dateUtils.format(new Date()));
         logService.save(log);
 
         if (b && b1) {
@@ -253,6 +255,7 @@ public class bookController {
         log.setOperating(0);
         log.setReputation(user.getReputation());
         log.setBid(book.getBid());
+        log.setSdate(dateUtils.format(new Date()));
         logService.save(log);
 
         if (b && b1) {
@@ -265,8 +268,8 @@ public class bookController {
     public R getCount() {
         int count = bookService.count();
         int log = logService.count();
-        int ucount=userService.count();
-        Map<String,Object> map = new HashMap();
+        int ucount = userService.count();
+        Map<String, Object> map = new HashMap();
         map.put("count", count);
         map.put("log", log);
         map.put("ucount", ucount);
