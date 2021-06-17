@@ -19,7 +19,7 @@ export default {
     return {
       option: {
         title: {
-          text: '借-还曲线图'
+          text: '借-还7天曲线图'
         },
         tooltip: {
           trigger: 'axis'
@@ -29,7 +29,7 @@ export default {
         },
         xAxis: {
           type: 'category',
-          data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+          data: ['周一', '周二', '周三', '周四', '周五', '周六', '今天']
         },
         yAxis: {
           type: 'value'
@@ -47,14 +47,16 @@ export default {
             smooth: true
           }
         ]
-      }
+      },
+      date: new Date()
     }
   },
   created() {
+    this.getData();
   },
   methods: {
     getData() {
-      this.$http.get("http://localhost:8081/api").then(res => {
+      this.$http.get("http://localhost:8081/api/getEchats").then(res => {
         console.log(res)
       })
     }

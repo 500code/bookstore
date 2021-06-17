@@ -7,11 +7,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wlwl.springboot.entity.R;
 import com.wlwl.springboot.entity.log;
 import com.wlwl.springboot.service.logService;
+import com.wlwl.springboot.utils.dateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -49,12 +52,24 @@ public class logController {
     //    表格
     @GetMapping("getEchats")
     public R getEchats() {
+//        获取最近七天
+        Map<String, Object> map = dateUtils.getPastDate(7);
+        List<Date> dateList = (List<Date>) map.get("dateList");
+        System.out.println(dateList);
+        System.out.println(map.get("dates"));
+
         QueryWrapper<log> wrapper = new QueryWrapper<>();
         wrapper.eq("operating", "0");//还书
+        for (Date date : dateList) {
+//            wrapper.eq("")
+        }
         int outCount = logService.count(wrapper);
+
+
+
         wrapper = new QueryWrapper<>();
         wrapper.eq("operating", "1");//借书
-        int inCount=logService.count(wrapper);
+        int inCount = logService.count(wrapper);
 
         return R.ok();
     }
